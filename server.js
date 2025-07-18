@@ -1,11 +1,17 @@
-const http = require('http');
+const express = require('express');
+const path = require('path');
+const app = express();
 
-const server = http.createServer((req, res) => {
-  res.writeHead(200, { 'Content-Type': 'text/html' });
-  res.end('<h1>Node.js Server Running</h1>');
+const port = process.env.PORT || 3000;
+
+// Serve static files
+app.use(express.static(__dirname));
+
+// Fallback route for SPA
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-const PORT = 3000;
-server.listen(PORT, () => {
-  console.log(`Server running at http://localhost:${PORT}`);
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
 });
